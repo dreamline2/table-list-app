@@ -23,4 +23,9 @@ export type BankResponse = {
 export interface BankState {
   accounts: BankAccount[];
   results: BankAccount[];
+  searchedResults: BankAccount[];
+  searched: string;
+  rowsPerPage: number;
+  currentPage: number;
+  order: string;
 }
