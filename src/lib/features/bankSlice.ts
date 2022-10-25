@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../store";
 import type { BankAccount, BankState } from "@/lib/types";
+import type { DateRange } from "@mui/x-date-pickers-pro/DateRangePicker";
 import moment from "moment";
 
 // Initial state
@@ -16,6 +17,7 @@ export const initialState: BankState = {
   rowsPerPage: 10,
   currentPage: 0,
   order: "asc",
+  dateRange: [null, null],
 };
 
 // Actual Slice
@@ -45,6 +47,44 @@ export const bankSlice = createSlice({
     setOrder(state, action: PayloadAction<string>) {
       state.order = action.payload;
     },
+    setDateRange(state, action: PayloadAction<DateRange<number | undefined>>) {
+      const [start, end] = action.payload;
+      // Get previous results, even no text search.
+      let preResults = state[state.searched ? "searchedResults" : "accounts"];
+      if (!start && !end) {
+        // If no start and end, it means the display needs to be restored to initialization.
+        state.results = state[state.searched ? "searchedResults" : "accounts"];
+      } else {
+        if (start) {
+          preResults = preResults.filter(
+            (acc) => moment(acc.transactionDate).valueOf() > start
+          );
+        }
+        if (end) {
+          preResults = preResults.filter(
+            (acc) => moment(acc.transactionDate).valueOf() < end
+          );
+        }
+        state.results = preResults;
+      }
+      state.dateRange = action.payload;
+    },
+    sortDateTime(state) {
+      const isAsc = state.order === "asc";
+      const sorted = state.results.sort((a, b) => {
+        return (
+          moment(b.transactionDate).valueOf() -
+          moment(a.transactionDate).valueOf()
+        );
+      });
+      state.accounts = isAsc ? sorted : sorted.reverse();
+      state.results = isAsc ? sorted : sorted.reverse();
+      state.order = isAsc ? "desc" : "asc";
+    },
+    clearDateRange(state) {
+      state.dateRange = [null, null];
+      state.results = state.accounts;
+    },
   },
 });
 
@@ -54,6 +94,9 @@ export const {
   setPage,
   setRowsPerPage,
   setOrder,
+  setDateRange,
+  sortDateTime,
+  clearDateRange,
 } = bankSlice.actions;
 export const selectBank = (state: RootState) => state.bank;
 export default bankSlice.reducer;

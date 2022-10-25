@@ -1,3 +1,5 @@
+import type { DateRange } from "@mui/x-date-pickers-pro/DateRangePicker";
+
 export type BankMetaData = {
   title: string;
   longDesc: string;
@@ -28,4 +30,5 @@ export interface BankState {
   rowsPerPage: number;
   currentPage: number;
   order: string;
+  dateRange: DateRange<number | undefined>;
 }

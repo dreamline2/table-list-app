@@ -14,6 +14,7 @@ import SearchBar from "material-ui-search-bar";
 import Box from "@mui/material/Box";
 import { visuallyHidden } from "@mui/utils";
 import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
 import Typography from "@mui/material/Typography";
 
 import moment from "moment";
@@ -26,6 +27,7 @@ import {
   setRowsPerPage,
   setOrder,
   setBankAccounts,
+  setDateRange,
 } from "@/lib/features/bankSlice";
 import { useDispatch, useSelector } from "react-redux";
 import type { BankState } from "@/lib/types";
@@ -33,6 +35,7 @@ import type { RootState } from "@/lib/store";
 import { Link } from "react-router-dom";
 
 import TablePaginationActions from "@/components/TablePaginationActions";
+import DateRangePicker from "@/components/DateRangePicker";
 
 const BankAccountTable = () => {
   const dispatch = useDispatch();
@@ -106,6 +109,42 @@ const BankAccountTable = () => {
           onChange={debouncedResults}
           onCancelSearch={() => cancelSearch()}
         />
+        <DateRangePicker />
+        <ButtonGroup variant="outlined" aria-label="outlined button group">
+          <Button
+            variant="outlined"
+            onClick={(e) => dispatch(setDateRange([1664553600000, null]))}
+          >
+            10/01/2022 - null
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={(e) => dispatch(setDateRange([1452268800000, null]))}
+          >
+            01/09/2016 - null
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={(e) => dispatch(setDateRange([null, 1452700800000]))}
+          >
+            null - 01/14/2016
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={(e) =>
+              dispatch(setDateRange([1452268800000, 1452700800000]))
+            }
+          >
+            01/09/2016 - 01/14/2016
+          </Button>
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={(e) => dispatch(setDateRange([null, null]))}
+          >
+            Clear Range
+          </Button>
+        </ButtonGroup>
         <Typography variant="h5" gutterBottom>
           Search Results: {results.length}
         </Typography>
