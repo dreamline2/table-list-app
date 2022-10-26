@@ -36,11 +36,19 @@ import { Link } from "react-router-dom";
 
 import TablePaginationActions from "@/components/TablePaginationActions";
 import DateRangePicker from "@/components/DateRangePicker";
-
+import { Dayjs } from "dayjs";
+import { DateRange } from "@mui/x-date-pickers-pro/DateRangePicker";
 const BankAccountTable = () => {
   const dispatch = useDispatch();
   const bank = useSelector<RootState, BankState>(selectBank);
-  const { results, searched, rowsPerPage, currentPage, order } = bank;
+  const {
+    results,
+    searched,
+    rowsPerPage,
+    currentPage,
+    order,
+    dateRange: dates,
+  } = bank;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -109,7 +117,16 @@ const BankAccountTable = () => {
           onChange={debouncedResults}
           onCancelSearch={() => cancelSearch()}
         />
-        <DateRangePicker />
+        <DateRangePicker
+          value={dates}
+          onChange={(newValue: DateRange<Dayjs>) => {
+            const dateRange = newValue.map((time) =>
+              time ? moment(time?.format()).valueOf() : null
+            ) as DateRange<number>;
+            // console.log(dateRange);
+            dispatch(setDateRange(dateRange));
+          }}
+        />
         <ButtonGroup variant="outlined" aria-label="outlined button group">
           <Button
             variant="outlined"

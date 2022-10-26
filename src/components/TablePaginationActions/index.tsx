@@ -11,17 +11,7 @@ import { selectBank, setPage } from "@/lib/features/bankSlice";
 import type { BankState } from "@/lib/types";
 import type { RootState } from "@/lib/store";
 
-interface TablePaginationActionsProps {
-  count: number;
-  page: number;
-  rowsPerPage: number;
-  onPageChange: (
-    event: React.MouseEvent<HTMLButtonElement>,
-    newPage: number
-  ) => void;
-}
-
-const TablePaginationActions = (props: TablePaginationActionsProps) => {
+const TablePaginationActions = () => {
   const dispatch = useDispatch();
 
   const theme = useTheme();
@@ -60,6 +50,7 @@ const TablePaginationActions = (props: TablePaginationActionsProps) => {
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}
         aria-label="first page"
+        role="first-page"
       >
         {theme.direction === "rtl" ? <LastPageIcon /> : <FirstPageIcon />}
       </IconButton>
@@ -67,6 +58,7 @@ const TablePaginationActions = (props: TablePaginationActionsProps) => {
         onClick={handleBackButtonClick}
         disabled={page === 0}
         aria-label="previous page"
+        role="previous-page"
       >
         {theme.direction === "rtl" ? (
           <KeyboardArrowRight />
@@ -78,6 +70,7 @@ const TablePaginationActions = (props: TablePaginationActionsProps) => {
         onClick={handleNextButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
         aria-label="next page"
+        role="next-page"
       >
         {theme.direction === "rtl" ? (
           <KeyboardArrowLeft />
@@ -89,6 +82,7 @@ const TablePaginationActions = (props: TablePaginationActionsProps) => {
         onClick={handleLastPageButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
         aria-label="last page"
+        role="last-page"
       >
         {theme.direction === "rtl" ? <FirstPageIcon /> : <LastPageIcon />}
       </IconButton>

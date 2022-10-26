@@ -8,37 +8,49 @@ import {
   DateRangePicker,
   DateRange,
 } from "@mui/x-date-pickers-pro/DateRangePicker";
-import { selectBank, setDateRange } from "@/lib/features/bankSlice";
-import { useDispatch, useSelector } from "react-redux";
-import type { BankState } from "@/lib/types";
-import type { RootState } from "@/lib/store";
-import moment from "moment";
 
-const BasicDateRangePicker = () => {
-  const dispatch = useDispatch();
-  const bank = useSelector<RootState, BankState>(selectBank);
-  const { dateRange } = bank;
+const BasicDateRangePicker = ({
+  value,
+  onChange,
+}: {
+  value: DateRange<number | undefined>;
+  onChange: (newValue: DateRange<Dayjs>) => void;
+}) => {
   return (
     <LocalizationProvider
       dateAdapter={AdapterDayjs}
       localeText={{ start: "From", end: "To" }}
     >
       <DateRangePicker
-        value={dateRange}
-        onChange={(newValue: DateRange<Dayjs>) => {
-          const dateRange = newValue.map((time) =>
-            time ? moment(time?.format()).valueOf() : null
-          ) as DateRange<number>;
-          // console.log(dateRange);
-          dispatch(setDateRange(dateRange));
+        value={value}
+        onChange={onChange}
+        renderInput={(startProps, endProps) => {
+          // console.log(startProps.inputProps.onChange);
+          const startDateProps = {
+            ...startProps,
+            inputProps: {
+              ...startProps.inputProps,
+              "data-testid": "date-from-input",
+              onChange: onChange as () => {}
+              ,
+            },
+          };
+          const endDateProps = {
+            ...endProps,
+            inputProps: {
+              ...endProps.inputProps,
+              "data-testid": "date-to-input",
+              onChange: onChange as () => {},
+            },
+          };
+          return (
+            <React.Fragment>
+              <TextField {...startDateProps} />
+              <Box sx={{ mx: 2 }}> to </Box>
+              <TextField {...endDateProps} />
+            </React.Fragment>
+          );
         }}
-        renderInput={(startProps, endProps) => (
-          <React.Fragment>
-            <TextField {...startProps} />
-            <Box sx={{ mx: 2 }}> to </Box>
-            <TextField {...endProps} />
-          </React.Fragment>
-        )}
       />
     </LocalizationProvider>
   );
