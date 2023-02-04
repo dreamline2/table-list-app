@@ -12,7 +12,10 @@
 
 ## Tech Stack
 - Husky 
+<<<<<<< HEAD
 - Editor Config
+=======
+>>>>>>> 261da81 (chore: update README tech stack, commands)
 - Commitlint
 - Typescript
 - Redux Toolkit & Query
