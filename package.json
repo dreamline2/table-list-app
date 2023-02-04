@@ -1,5 +1,9 @@
 {
-  "name": "frontend-bank-list",
+  "name": "table-list-app",
+  "author": {
+    "name": "wilson",
+    "email": "wilson20120311@gmail.com"
+  },
   "version": "0.1.0",
   "private": true,
   "dependencies": {
