@@ -12,10 +12,7 @@
 
 ## Tech Stack
 - Husky 
-<<<<<<< HEAD
 - Editor Config
-=======
->>>>>>> 261da81 (chore: update README tech stack, commands)
 - Commitlint
 - Typescript
 - Redux Toolkit & Query
@@ -30,3 +27,4 @@
 
 ## Demo Site Link:
 https://capable-mandazi-44c392.netlify.app/
+
